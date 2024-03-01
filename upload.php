@@ -1,0 +1,39 @@
+<?php
+require_once 'vendor/autoload.php';
+use Verot\Upload\Upload;
+
+function redirect($url){
+    header(sprintf('Location: %s', $url));
+    die;
+}
+
+if (!isset($_FILES['file'])){
+    redirect("index.php?error=No-image");
+}
+
+$file = $_FILES['file'];
+$path = 'uploads/';
+
+$foo = new Upload($file);
+
+if(!$foo){
+    redirect("index.php?error=no-uploaded");
+}
+$user = 'jcastillo';
+$filename = uniqid() . '_' . $user . '_' . $_FILES['file']['name'];
+$size_x = 1000;
+$foo->file_new_name_body = $filename;
+$foo->file_new_name_ext = '';
+$foo->image_resize = true;
+$foo->image_ratio_y = true; // Mantener la relación de aspecto y ajustar la altura automáticamente
+$foo->image_x = $size_x;
+$foo->jpeg_quality = 90; // Establecer la calidad JPEG
+
+$foo->process($path);
+if($foo->processed){
+  // Conexión a la base de datos utilizando PDO
+  include './config/conexion.php';
+  echo sprintf('Imagen redimensionada a %s px con éxito <br>', $size_x);
+}else{
+  echo sprintf('Error: %s<br>', $foo->error);
+}
