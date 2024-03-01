@@ -1,0 +1,17 @@
+{
+    "name": "msanchez/crud_imagenes",
+    "description": "crud para manejo de imagenes",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Msanchez\\CrudImagenes\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Markosgt7",
+            "email": "markos.guate7@gmail.com"
+        }
+    ],
+    "require": {}
+}
