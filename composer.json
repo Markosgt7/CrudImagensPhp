@@ -13,5 +13,7 @@
             "email": "markos.guate7@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "verot/class.upload.php": "^2.1"
+    }
 }

@@ -25,20 +25,18 @@
           />
         </div>
         <button type="submit" class="btn btn-primary">Subir Foto</button>
+        
       </form>
       <hr>
       <table class="table table-bordered  table-striped">
       <thead>
         <tr>
-          <th scope="col">Ruta  de la foto</th>
+          <th scope="col">Id</th>
           <th scope="col">Foto</th>
         </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>uploads/foto</td>
-            <td><img src="" alt="Imagen no cargada" id="fotoPrevisualizacion" /></td>
-          </tr>
+        <tbody id="table_fotos">
+         
         </tbody>
     </table>
     </div>
