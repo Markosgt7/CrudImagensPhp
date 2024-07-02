@@ -1,22 +1,25 @@
 <?php
 require_once 'vendor/autoload.php';
+
 use Verot\Upload\Upload;
+
 include './config/conexion.php';
 
 switch ($_GET['op']) {
   case 'enviarfoto':
-    function redirect($url){
+    function redirect($url)
+    {
       header(sprintf('Location: %s', $url));
       die;
     }
-    if (!isset($_FILES['photo'])){
-        redirect("index.php?error=No-image");
+    if (!isset($_FILES['photo'])) {
+      redirect("index.php?error=No-image");
     }
     $file = $_FILES['photo'];
     $path = 'uploads/';
     $foo = new Upload($file);
-    if(!$foo){
-        redirect("index.php?error=no-uploaded");
+    if (!$foo) {
+      redirect("index.php?error=no-uploaded");
     }
     $user = 'jcastillo';
     $filename = uniqid() . '_' . $user . '_' . $_FILES['photo']['name'];
@@ -29,34 +32,37 @@ switch ($_GET['op']) {
     $foo->jpeg_quality = 90; // Establecer la calidad JPEG
     $foo->process($path);
     $uploadDir = $path . $filename;
-    if($foo->processed){
-      
+    if ($foo->processed) {
       $stmt = $pdo->prepare("INSERT INTO imagenes (ruta) VALUES (:ruta)");
       $stmt->bindParam(':ruta', $uploadDir);
       $stmt->execute();
-      echo sprintf('Imagen redimensionada a %s px con éxito <br>', $size_x);
-    }else{
+      echo sprintf('Imagen cargada con éxito');
+    } else {
       echo sprintf('Error: %s<br>', $foo->error);
     }
-  break;
+    break;
   case 'mostrarfotos':
     $sql =  $pdo->prepare("SELECT * FROM imagenes");
-    $sql -> execute();
+    $sql->execute();
     $listaImagenes = $sql->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($listaImagenes as $imagen ) {
+    foreach ($listaImagenes as $imagen) {
       echo '<tr>
               <td>'
-                .$imagen["id"].
-              '</td>
+        . $imagen["id"] .
+        '</td>
               <td>
-                <img src="'.$imagen["ruta"].'" width="150" height="175"/>
+                <img src="' . $imagen["ruta"] . '" width="150" height="175"/>
               </td>
+              <td>
+              <button class="btn btn-primary btn-sm view-image" data-image-url="' . $imagen["ruta"] . '">
+                <i class="fas fa-eye"></i> Ver Imagen
+              </button>
+            </td>
             </tr>';
     }
-  break;
-  
+    break;
+
   default:
     # code...
     break;
 }
-
